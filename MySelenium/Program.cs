@@ -1,33 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support;
 
 namespace MySelenium
 {
     public class Program
     {
-        public IWebDriver driver;
-        TimeSpan timeuot = new TimeSpan(00, 01, 00);
-
+        public ChromeDriver driver;
+        public string Titl { get; set; }
+        public TimeSpan timeout = new TimeSpan(00, 01, 00);
+        public int b { get; set; }
+        public string Linkes { get; set; }
         public static void Main()
         {
             Program ro = new Program();
             ro.Start();
-            ro.Quit();
+            ro.Element();
+            //ro.Quit();
         }
 
         public void Start()
         {
             driver = new ChromeDriver();
-            TimeSpan timeout = new TimeSpan(00, 00, 30);
             driver.Manage().Window.Maximize();
-            driver.Navigate().GoToUrl("http://tairai.itech-test.ru/");
+            var Url = "https://www.yandex.ru/";
+            driver.Navigate().GoToUrl(Url);
+        }
+
+        public void Element()
+        {
+
+            List<IWebElement> El = driver.FindElements(By.TagName("a")).ToList();
+            foreach (IWebElement link in El)
+            {
+
+                //for (int i = 0; i < 1; i++)
+                //{
+                //    b += 1;
+                //}
+                //Console.WriteLine(b);
+
+                //Task.Delay(4000).Wait();
+                try
+                {
+                    var href = link.GetAttribute("href");
+                    Task.Delay(3000).Wait();
+                    driver.Navigate().GoToUrl(href);
+
+                    Console.WriteLine(href);
+                }
+                catch
+                {
+
+                }
+            }
+
+            var a = driver.Title;
+            Console.WriteLine(a);
         }
 
         public void Quit()
@@ -35,9 +67,5 @@ namespace MySelenium
             driver.Quit();
         }
 
-        public void Size()
-        {
-            int size = new IWindow.size(1900, 1380);
-        }
     }
 }
